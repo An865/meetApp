@@ -17,11 +17,14 @@
 
 ## Scenarios
 ### FEATURE 1: FILTER EVENTS BY CITY
-Scenario 1.1: When user hasn’t searched for a city, show upcoming events from all cities.<br />
-```Given a user hasn't searched for a city yet
-```When the user first starts the app
-```Then the user will see a list of all upcoming events <br />
-Scenario 1.2: User should see a list of suggestions when they search for a city.<br />
+Scenario 1.1: When user hasn’t searched for a city, show upcoming events from all cities.  \
+Given a user hasn't searched for a city yet  \
+When the user first starts the app  \
+Then the user will see a list of all upcoming events  \
+
+Scenario 1.2: User should see a list of suggestions when they search for a city.
+
+
 Scenario 1.3: User can select a city from the suggested list.
 
 ### FEATURE 2: SHOW/HIDE AN EVENT’S DETAILS
