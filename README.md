@@ -51,7 +51,7 @@ Then the event will collapse and hide its details
 ### FEATURE 3: SPECIFY NUMBER OF EVENTS
 Scenario 3.1: When user hasn’t specified a number, 32 is the default number.  \
 Given a list of events is being displayed  \
-When the user hasn't entered a specific number of events to display  \ 
+When the user hasn't entered a specific number of events to display  \
 Then 32 events will be displayed
 
 Scenario 3.2: User can change the number of events they want to see.  \
