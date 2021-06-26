@@ -1,11 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import EventList from './EventList';
+import CitySearch from './CitySearch';
+import EventsNumber from './EventsNumber';
 
 function App() {
   return (
     <div className="App">
-      
+      <EventsNumber />
+      <CitySearch />
+      <EventList />
     </div>
   );
 }
