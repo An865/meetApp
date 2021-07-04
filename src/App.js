@@ -55,10 +55,14 @@ class App extends Component {
 
   //when component mounts, get events then set events and location state
   componentDidMount() {
+    //get current state of events number
+    const {numEvents} = this.setState;
     this.mounted = true;
     getEvents().then((events) => {
       if (this.mounted) {
-        this.setState({ events, locations: extractLocations(events) });
+        this.setState({ 
+          events: events.slice(0, numEvents),
+          locations: extractLocations(events) });
       }
     });
   }
