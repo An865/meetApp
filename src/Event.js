@@ -13,13 +13,13 @@ class Event extends Component{
    render(){
       let event = this.props.event;
       return(
-         <div>
-            <h1 className="EventSummary">{event.summary}</h1>
-            <h2 className="EventDate">{event.start.dateTime} {event.start.timeZone}</h2>
-            <h2 className="EventLocation">{event.location}</h2>
+         <div className="event">
+            <h1 className="name">{event.summary}</h1>
+            <p className="EventDate">{event.start.dateTime} {event.start.timeZone}</p>
+            <p className="EventLocation">{event.location}</p>
 
             {this.state.show === false && (
-               <button className="showDetails" onClick={() => this.detailsButton()}>
+               <button className="details-btn" onClick={() => this.detailsButton()}>
                   Show Details
                </button>
             )}

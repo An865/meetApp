@@ -2,9 +2,10 @@ import React, {Component} from "react";
 
 class EventsNumber extends Component{
      state = {
-         numEvents: 10,
+         numEvents: 32,
       };
 
+      //when user changes event number input update numEvents state
       inputChange = (e) => {
          let value = e.target.value;
          this.setState({
@@ -22,11 +23,10 @@ class EventsNumber extends Component{
                value = {numberOfEvents}
                onChange={(e) => this.inputChange(e)}
             />
-             <label>Number of Events</label>
+             <label htmlFor="numberOfEvents">number of events</label>
          </div>
       )
    }
-
 }
 
 export default EventsNumber

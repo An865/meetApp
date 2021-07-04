@@ -11,7 +11,7 @@ describe("<Event /> component", () => {
    });
 
    test("show event title", () => {
-      expect(EventWrapper.find(".EventSummary")).toHaveLength(1);
+      expect(EventWrapper.find(".name")).toHaveLength(1);
     });
  
    test("show event location", () => {
@@ -23,7 +23,7 @@ describe("<Event /> component", () => {
    })
 
    test( "show details button exists", ()=>{
-      expect(EventWrapper.find(".showDetails")).toHaveLength(1);
+      expect(EventWrapper.find(".details-btn")).toHaveLength(1);
    })
 
    test("hide details by default", () => {
@@ -35,7 +35,7 @@ describe("<Event /> component", () => {
       EventWrapper.setState({
         show: false,
       });
-      EventWrapper.find(".showDetails").simulate("click");
+      EventWrapper.find(".details-btn").simulate("click");
       expect(EventWrapper.state("show")).toEqual(true);
     });
 
@@ -44,7 +44,7 @@ describe("<Event /> component", () => {
         show: false,
       });
   
-      EventWrapper.find(".showDetails").simulate("click");
+      EventWrapper.find(".details-btn").simulate("click");
       expect(EventWrapper.find(".EventDetails")).toHaveLength(1);
     });
 

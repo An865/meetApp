@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
 
 
-
-
 class CitySearch extends Component {
+
+  state = {
+    query: '',
+    suggestions: [],
+    showSuggestions: undefined,
+  }
+  
+
    handleInputChanged = (event) => {
       const value = event.target.value;
       const suggestions = this.props.locations.filter((location) => {
@@ -17,34 +23,36 @@ class CitySearch extends Component {
 
     handleItemClicked = (suggestion) => {
       this.setState({
-        query: suggestion
+        query: suggestion,
+        showSuggestions: false,
       });
+    
+      this.props.updateEvents(suggestion);
     }
-
-   state = {
-      query: '',
-      suggestions: [],
-    }
+  
    render() {
      return (
       <div className="CitySearch">
-      <input
-        type="text"
-        className="city"
-        value={this.state.query}
-        onChange={this.handleInputChanged}
-      />
-
-<ul className="suggestions">
+        
+        <input
+          type="text"
+          className="city"
+          value={this.state.query}
+          onChange={this.handleInputChanged}
+          onFocus={() => { this.setState({ showSuggestions: true }) }}
+        />
+        <label htmlFor='CitySearch'>Search a city for events</label>
+        
+<ul className="suggestions" style={this.state.showSuggestions ? {}: { display: 'none' }}>
   {this.state.suggestions.map((suggestion) => (
     <li
       key={suggestion}
       onClick={() => this.handleItemClicked(suggestion)}
     >{suggestion}</li>
   ))}
-  <li>
-    <b>See all cities</b>
-  </li>
+ <li onClick={() => this.handleItemClicked("all")}>
+  <b>See all cities</b>
+</li>
 </ul>
 
     </div>
