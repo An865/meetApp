@@ -5,12 +5,13 @@ class EventsNumber extends Component{
          numEvents: 32,
       };
 
-      //when user changes event number input update numEvents state
+      //when user changes event number input update numEvents state and call updateEvents
       inputChange = (e) => {
          let value = e.target.value;
          this.setState({
             numEvents: value,
          });
+         this.props.updateEvents(value)
       }
 
       render(){
