@@ -7,11 +7,11 @@ class EventsNumber extends Component{
 
       //when user changes event number input update numEvents state and call updateEvents
       inputChange = (e) => {
-         let value = e.target.value;
+         let eventCount = e.target.value;
          this.setState({
-            numEvents: value,
+            numEvents: eventCount,
          });
-         this.props.updateEvents(value)
+         this.props.updateEvents(eventCount)
       }
 
       render(){
