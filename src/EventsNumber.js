@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 
 class EventsNumber extends Component{
+
      state = {
          numEvents: 32,
       };
@@ -11,7 +12,7 @@ class EventsNumber extends Component{
          this.setState({
             numEvents: eventCount,
          });
-         this.props.updateEvents(null, eventCount)
+         this.props.updateEvents(null, eventCount);
       }
 
       render(){
@@ -22,7 +23,7 @@ class EventsNumber extends Component{
                type="test"
                className="EventsNumber"
                value = {numberOfEvents}
-               onChange={(e) => this.inputChange(e)}
+               onChange={this.inputChange}
             />
              <label htmlFor="numberOfEvents">number of events</label>
          </div>
@@ -30,4 +31,4 @@ class EventsNumber extends Component{
    }
 }
 
-export default EventsNumber
+export default EventsNumber;
