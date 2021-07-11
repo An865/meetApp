@@ -30,15 +30,19 @@ defineFeature(feature, test => {
 
       test('User can change the number of events they want to see.', ({ given, when, then }) => {
          given('a list of events is being displayed', () => {
-  
+            AppWrapper = mount(<App />);
+            EventListWrapper = mount(<EventList events={mockData}/>)
          });
   
          when('a user enters a number of events to display', () => {
-  
+            AppWrapper.update();
+            AppWrapper.find('.EventsNumber').simulate('change', { target: { value: 5 } });
          });
   
          then('the entered number of events is displayed', () => {
-  
+            AppWrapper.update();
+            EventsNumberWrapper = AppWrapper.find(EventsNumber);
+            expect(EventsNumberWrapper.state('numEvents')).toBe(5);
          });
       });
    });
