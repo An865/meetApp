@@ -6,7 +6,7 @@ describe("<EventsNumber /> component", () => {
    let EventsNumberWrapper;
    
    beforeAll(()=> {
-      EventsNumberWrapper = shallow(<EventsNumber />);
+      EventsNumberWrapper = shallow(<EventsNumber updateEvents={() => {}} />);
    })
 
    test("textbox is rendered", () => {

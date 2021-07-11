@@ -16,13 +16,13 @@ class EventsNumber extends Component{
       }
 
       render(){
-         const numberOfEvents = this.state.numEvents;
+         ;
       return(
          <div className="numberOfEvents">
             <input 
                type="test"
                className="EventsNumber"
-               value = {numberOfEvents}
+               value = {this.state.numEvents}
                onChange={this.inputChange}
             />
              <label htmlFor="numberOfEvents">number of events</label>
