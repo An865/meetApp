@@ -12,7 +12,7 @@ defineFeature(feature, test => {
 
    let AppWrapper;
    let EventsNumberWrapper;
-   let EventListWrapper
+   let EventListWrapper;
 
    test('When user hasn’t specified a number, 32 is the default number.', ({ given, when, then }) => {
       given('a list of events is being displayed', () => {
