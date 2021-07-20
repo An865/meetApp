@@ -55,19 +55,19 @@ class CitySearch extends Component {
           onFocus={() => { this.setState({ showSuggestions: true }) }}
         />
         <label htmlFor='CitySearch'>Search a city for events</label>
-        <InfoAlert text={this.state.infoText} />
-<ul className="suggestions" style={this.state.showSuggestions ? {}: { display: 'none' }}>
-  {this.state.suggestions.map((suggestion) => (
-    <li
-      key={suggestion}
-      onClick={() => this.handleItemClicked(suggestion)}
-    >{suggestion}</li>
-  ))}
- <li onClick={() => this.handleItemClicked("all")}>
-  <b>See all cities</b>
-</li>
-</ul>
 
+      <ul className="suggestions" style={this.state.showSuggestions ? {}: { display: 'none' }}>
+        {this.state.suggestions.map((suggestion) => (
+          <li
+            key={suggestion}
+            onClick={() => this.handleItemClicked(suggestion)}
+          >{suggestion}</li>
+        ))}
+      <li onClick={() => this.handleItemClicked("all")}>
+        <b>See all cities</b>
+      </li>
+      </ul>
+      <InfoAlert text={this.state.infoText} />
     </div>
      );
    }
