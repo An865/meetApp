@@ -3,7 +3,10 @@ import './App.css';
 import EventList from './EventList';
 import CitySearch from './CitySearch';
 import EventsNumber from './EventsNumber';
-import { getEvents, extractLocations } from './api';
+import { OfflineAlert } from './Alert';
+import WelcomeScreen from './WelcomeScreen';
+import { getEvents, extractLocations, checkToken, getAccessToken } from
+'./api';
 
 class App extends Component {
 
@@ -11,7 +14,8 @@ class App extends Component {
     events: [],
     locations: [],
     numEvents: 32,
-    currentLocation: 'all'
+    currentLocation: 'all',
+    showWelcomeScreen: undefined,
   }
 
   //update events displayed by location or by number of events depending on passed values
@@ -54,16 +58,29 @@ class App extends Component {
   }
 
   //when component mounts, get events then set events and location state
-  componentDidMount() {
-    //get current state of events number
+  async componentDidMount() {
     this.mounted = true;
-    getEvents().then((events) => {
-      if (this.mounted) {
-        this.setState({ 
-          events: events.slice(0, this.state.numEvents),
-          locations: extractLocations(events) });
-      }
-    });
+    //get and validate token from local storage, if none users enter new auth on login. 
+    const accessToken = localStorage.getItem('access_token');
+    const isTokenValid = (await checkToken(accessToken)).error ? false :
+    true;
+    const searchParams = new URLSearchParams(window.location.search);
+    //code used after getEvents()
+    const code = searchParams.get("code");
+    this.setState({ showWelcomeScreen: !(code || isTokenValid) });
+    if ((code || isTokenValid) && this.mounted) {
+      getEvents().then((events) => {
+        if (this.mounted) {
+          this.setState({ events: events.slice(0, this.state.numEvents), locations: extractLocations(events) });
+        }
+    }); }
+
+    //alert user of offline status
+    if(!navigator.onLine){
+      this.setState({
+        offlineAlert: 'you are offline, cached data is displayed'
+      })
+    }
   }
 
   componentWillUnmount(){
@@ -71,10 +88,16 @@ class App extends Component {
   }
 
   render(){
+    if (this.state.showWelcomeScreen === undefined) return <div
+    className="App" />
+
     return (
       <div className="App">
+         <WelcomeScreen showWelcomeScreen={this.state.showWelcomeScreen}
+          getAccessToken={() => { getAccessToken() }} />
         <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
         <EventsNumber numEvents={this.state.numEvents} updateEvents={this.updateEvents}/>
+        <OfflineAlert text={this.state.offlinealert} />
         <EventList events={this.state.events} />
       </div>
     );

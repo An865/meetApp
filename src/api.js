@@ -2,6 +2,7 @@ import { mockData } from './mock-data';
 import axios from 'axios';
 import './nprogress.css';
 import NProgress from 'nprogress';
+
 /**
  *
  * @param {*} events:
@@ -43,6 +44,12 @@ import NProgress from 'nprogress';
     return mockData;
   }
 
+  if (!navigator.onLine) {
+    const events = localStorage.getItem("lastEvents");
+    NProgress.done();
+    return events ? JSON.parse(events).events:[];
+  }
+
   const token = await getAccessToken();
   //if given token then make get call to serverless function to get data and extract locations
   if (token) {
@@ -51,8 +58,8 @@ import NProgress from 'nprogress';
     const result = await axios.get(url);
     if (result.data) {
       var locations = extractLocations(result.data.events);
-      localStorage.setItem("lastEvents", JSON.stringify(result.data));
-      localStorage.setItem("locations", JSON.stringify(locations));
+      localStorage.setItem('lastEvents', JSON.stringify(result.data));
+      localStorage.setItem('locations', JSON.stringify(locations));
     }
     NProgress.done();
     return result.data.events;
