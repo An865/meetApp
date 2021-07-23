@@ -73,14 +73,20 @@ class App extends Component {
         if (this.mounted) {
           this.setState({ events: events.slice(0, this.state.numEvents), locations: extractLocations(events) });
         }
-    }); }
+      }); 
+    }
 
     //alert user of offline status
     if(!navigator.onLine){
       this.setState({
         offlineAlert: 'you are offline, cached data is displayed'
       })
+    } else {
+      this.setState({
+        offlineAlert: '',
+      })
     }
+
   }
 
   componentWillUnmount(){
