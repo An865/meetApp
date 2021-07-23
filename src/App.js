@@ -103,7 +103,7 @@ class App extends Component {
           getAccessToken={() => { getAccessToken() }} />
         <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
         <EventsNumber numEvents={this.state.numEvents} updateEvents={this.updateEvents}/>
-        <OfflineAlert text={this.state.offlinealert} />
+        <OfflineAlert text={this.state.offlineAlert} />
         <EventList events={this.state.events} />
       </div>
     );
