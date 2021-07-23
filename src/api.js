@@ -12,72 +12,26 @@ import NProgress from 'nprogress';
  * The Set will remove all duplicates from the array.
  */
 
-//removes auth code from url
- const removeQuery = () => {
-  if (window.history.pushState && window.location.pathname) {
-    var newurl =
-      window.location.protocol +
-      "//" +
-      window.location.host +
-      window.location.pathname;
-    window.history.pushState("", "", newurl);
-  } else {
-    newurl = window.location.protocol + "//" + window.location.host;
-    window.history.pushState("", "", newurl);
-  }
-};
 
-//extract locations from events
- export const extractLocations = (events) => {
-   var extractLocations = events.map((event) => event.location);
-   var locations = [...new Set(extractLocations)];
-   return locations;
- };
+/* Authorization and Authentication */
 
- //get the various events using serverless getevents function
- export const getEvents = async () => {
-  NProgress.start();
-
-  //if in development and href = localhost return the mockData events
-  if (window.location.href.startsWith("http://localhost")) {
-    NProgress.done();
-    return mockData;
-  }
-
-  if (!navigator.onLine) {
-    const events = localStorage.getItem("lastEvents");
-    NProgress.done();
-    return events ? JSON.parse(events).events:[];
-  }
-
-  const token = await getAccessToken();
-  //if given token then make get call to serverless function to get data and extract locations
-  if (token) {
-    removeQuery();
-    const url = 'https://ddonvi5s3e.execute-api.eu-central-1.amazonaws.com/dev/api/get-events' + '/' + token;
-    const result = await axios.get(url);
-    if (result.data) {
-      var locations = extractLocations(result.data.events);
-      localStorage.setItem('lastEvents', JSON.stringify(result.data));
-      localStorage.setItem('locations', JSON.stringify(locations));
-    }
-    NProgress.done();
-    return result.data.events;
-  }
-};
-
-//verify token
-export const checkToken = async (accessToken) => {
-  const result = await fetch(
-    `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
+//get the access token from serverless function if not already in local storage.
+const getToken = async (code) => {
+  const encodeCode = encodeURIComponent(code);
+  const { access_token } = await fetch(
+    'https://ddonvi5s3e.execute-api.eu-central-1.amazonaws.com/dev/api/token' + '/' + encodeCode
   )
-    .then((res) => res.json())
-    .catch((error) => error.json());
+    .then((res) => {
+      return res.json();
+    })
+    .catch((error) => error);
 
-  return result;
+  access_token && localStorage.setItem("access_token", access_token);
+
+  return access_token;
 };
 
-//get token from local storage and check it
+//get token from local storage
 export const getAccessToken = async () => {
   const accessToken = localStorage.getItem('access_token');
   const tokenCheck = accessToken && (await checkToken(accessToken));
@@ -101,18 +55,73 @@ export const getAccessToken = async () => {
   return accessToken;
 }
 
-//get the access token from serverless function and store in local storage
-const getToken = async (code) => {
-  const encodeCode = encodeURIComponent(code);
-  const { access_token } = await fetch(
-    'https://ddonvi5s3e.execute-api.eu-central-1.amazonaws.com/dev/api/token' + '/' + encodeCode
+//check validity of token
+export const checkToken = async (accessToken) => {
+  const result = await fetch(
+    `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${accessToken}`
   )
-    .then((res) => {
-      return res.json();
-    })
+    .then((res) => res.json())
     .catch((error) => error);
 
-  access_token && localStorage.setItem("access_token", access_token);
+  return result;
+};
 
-  return access_token;
+//removes authorization code from url once it isn't needed
+const removeQuery = () => {
+  if (window.history.pushState && window.location.pathname) {
+    var newurl =
+      window.location.protocol +
+      "//" +
+      window.location.host +
+      window.location.pathname;
+    window.history.pushState("", "", newurl);
+  } else {
+    newurl = window.location.protocol + "//" + window.location.host;
+    window.history.pushState("", "", newurl);
+  }
+};
+
+/*  Get data from API */
+
+
+
+ //get the various events using serverless getevents function
+ export const getEvents = async () => {
+  NProgress.start();
+
+  //if in development and href = localhost return the mockData events
+  if (window.location.href.startsWith("http://localhost")) {
+    NProgress.done();
+    return mockData;
+  }
+
+  //if app is offline then load the data from localStorage
+  if (!navigator.onLine) {
+    const data = localStorage.getItem("lastEvents");
+    NProgress.done();
+    return data ? JSON.parse(data).events : [];
+}
+
+   // If the app is online, request an access token and loads the API data.
+  const token = await getAccessToken();
+  //if given token then make get call to serverless function to get data and extract locations
+  if (token) {
+    removeQuery();
+    const url = 'https://ddonvi5s3e.execute-api.eu-central-1.amazonaws.com/dev/api/get-events' + '/' + token;
+    const result = await axios.get(url);
+    if (result.data) {
+      var locations = extractLocations(result.data.events);
+      localStorage.setItem('lastEvents', JSON.stringify(result.data));
+      localStorage.setItem('locations', JSON.stringify(locations));
+    }
+    NProgress.done();
+    return result.data.events;
+  }
+};
+
+//extract locations from google calendar api
+export const extractLocations = (events) => {
+  var extractLocations = events.map((event) => event.location);
+  var locations = [...new Set(extractLocations)];
+  return locations;
 };
