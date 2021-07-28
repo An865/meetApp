@@ -5,6 +5,9 @@ import CitySearch from './CitySearch';
 import EventsNumber from './EventsNumber';
 import { OfflineAlert } from './Alert';
 import WelcomeScreen from './WelcomeScreen';
+import {
+  ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip
+} from 'recharts';
 import { getEvents, extractLocations, checkToken, getAccessToken } from
 './api';
 
@@ -57,6 +60,17 @@ class App extends Component {
     }
   }
 
+  // Get data for total number of events in each city
+  getData = () => {
+    const {locations, events} = this.state;
+    const data = locations.map((location)=>{
+      const number = events.filter((event) => event.location === location).length
+      const city = location.split(', ').shift()
+      return {city, number};
+    })
+    return data;
+  };
+
   //when component mounts, get events then set events and location state
   async componentDidMount() {
     this.mounted = true;
@@ -94,16 +108,35 @@ class App extends Component {
   }
 
   render(){
+    const { locations, numEvents } = this.state;
+
     if (this.state.showWelcomeScreen === undefined) return <div
     className="App" />
 
     return (
       <div className="App">
+        <h1>Meet App</h1>
          <WelcomeScreen showWelcomeScreen={this.state.showWelcomeScreen}
           getAccessToken={() => { getAccessToken() }} />
-        <CitySearch locations={this.state.locations} updateEvents={this.updateEvents} />
-        <EventsNumber numEvents={this.state.numEvents} updateEvents={this.updateEvents}/>
+        <h4>Choose your nearest city</h4>
+        <CitySearch locations={locations} updateEvents={this.updateEvents} />
+        <EventsNumber numEvents={numEvents} updateEvents={this.updateEvents}/>
         <OfflineAlert text={this.state.offlineAlert} />
+          
+        <ScatterChart
+          width={400}
+          height={400}
+          margin={{
+            top: 20, right: 20, bottom: 20, left: 20,
+          }}
+        >
+          <CartesianGrid />
+          <XAxis type="category" dataKey="city" name="city" />
+          <YAxis type="number" dataKey="number" name="number of events" />
+          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+          <Scatter data={this.getData()} fill="#8884d8" />
+        </ScatterChart>
+
         <EventList events={this.state.events} />
       </div>
     );
