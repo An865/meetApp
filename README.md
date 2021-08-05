@@ -1,6 +1,6 @@
 Meet App
 
-![alt text](https://github.com/An865/meetApp/public/blob/main/MeetApp.png?raw=true)
+![alt text](https://github.com/An865/meetApp/blob/main/MeetApp.png?raw=true)
 
 
 ## Key Features
